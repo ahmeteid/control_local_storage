@@ -4,61 +4,117 @@ let allSpan = document.querySelectorAll(".buttons span");
 let results = document.querySelector(".results > span");
 
 allSpan.forEach(span => {
-    span.addEventListener("click", (event) => {
 
+    span.addEventListener("click", (event) => {
+        
         if(event.target.classList.contains("check-item")) {
+            
             checkItem();
         }
-
+        
         if(event.target.classList.contains("add-item")) {
+            
             addItem();
+        
         }
-
+        
         if(event.target.classList.contains("delete-item")) {
+            
             deleteItem();
         }
-
+        
         if(event.target.classList.contains("show-items")) {
+            
             showItems();
         }
     });
 });
 
-function checkInput() {
+function showMessage() {
     
-    results.innerHTML = "Input Can't Be Empty";
+    // results.innerHTML = "Input Can't Be Empty";
+    Swal.fire("Input Can't Be Empty");
 
 }
 
 function checkItem() {
-
-    if(theInput.value !== "") {
-
-        if(localStorage.getItem(theInput.value)) {
+    
+    if (theInput.value !== '') {
+        
+        if (localStorage.getItem(theInput.value)) {
             
             results.innerHTML = `Found Local Storage Item Called <span>${theInput.value}</span>`;
-
+        
         } else {
             
             results.innerHTML = `No Local Storage Item With The Name <span>${theInput.value}</span>`;
-
+        
         }
-
+    
     } else {
-
-        checkInput();
-
+        
+        showMessage();
+    
     }
 }
 
 function addItem() {
-    console.log("Add");
+    
+    if(theInput.value !== "") {
+        
+        localStorage.setItem(theInput.value, "");
+        
+        results.innerHTML = `Local Storage Item <span>${theInput.value}</span> Added`;
+        
+        theInput.value = "";
+    } else {
+        showMessage();
+    }
 }
 
 function deleteItem() {
-    console.log("Delete");
+    
+    if(theInput.value !== "") {
+        
+        if(localStorage.getItem(theInput.value)) {
+            
+            localStorage.removeItem(theInput.value);
+            
+            results.innerHTML = `Local Storage Item <span>${theInput.value}</span> Deleted`;
+            
+            theInput.value = "";
+        
+        } else {
+            
+            results.innerHTML = `No Locale Storage Item With this Name <span>${theInput.value}</span>`;
+        
+        }
+    
+    } else {
+        showMessage();
+    }
+
 }
 
 function showItems() {
-    console.log("Show");
+
+    if(theInput.value !== "") {
+        
+        Swal.fire("No Items at Locale Storage");
+    
+    } else {
+        
+        if(localStorage.length) {
+            
+            results.innerHTML = "";
+            
+            for(let [key, value] of Object.entries(localStorage)) {
+                
+                results.innerHTML += `<span class="keys">${key}</span>`;
+            
+            }
+        
+        }
+        
+    }
 }
